@@ -1,0 +1,98 @@
+<?php
+if (isset($_POST['beli']) && isset($_POST['bayar'])) {
+    $total_belanja = $_POST['beli'];
+    $pembayaran = $_POST['bayar'];
+} else {
+    $total_belanja = 0;
+    $pembayaran = 0;
+}
+
+$diskon = 0.32;
+$diskonMessage = "";
+$minim_pembelian = $total_belanja > 100000;
+$kembalian = (int)$pembayaran - (int)$total_belanja;
+if ($minim_pembelian) {
+    $diskonMessage = "Selamat Anda mendapatkan diskon " . $diskon * 100 . "%";
+    $harga_akhir = $total_belanja - ($total_belanja * $diskon);
+} else {
+    $diskonMessage = "Ayo belanja minimal Rp.100.000 untuk klaim diskon " . $diskon * 100 . "%";
+    $harga_akhir = $total_belanja;
+}
+
+
+function rupiah($angka): string
+{
+    $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
+    return $hasil_rupiah;
+}
+
+?>
+<div style="text-align: center;">
+    <b>
+        <h3>Praktikum 1</h3>
+        <p>Celvinanda Octiawan</p>
+        <p>20104410032</p>
+        <hr>
+        <br>
+    </b>
+</div>
+
+<html>
+<head>
+    <title>Praktikum 1</title>
+</head>
+<body>
+<form action="Praktikum1.php" method="post">
+    <fieldset>
+        <legend>
+            Mesin Kasir - TOKO SWALAYAN BAHAGIA
+        </legend>
+        <p>
+            <label>Total Pembelian </label>
+            <label>
+                <input type="number" placeholder="175500" name="beli" value="0"/>
+            </label>
+        </p>
+        <p>
+            <label>Pembayaran </label>
+            <label>
+                <input type="number" placeholder="200000" name="bayar" value="0"/>
+            </label>
+        </p>
+        <p>
+            <label>
+                <input type="submit" name="input" value="Hitung"/>
+            </label>
+        </p>
+        <p>
+            <label>
+                <?= $diskonMessage ?>
+            </label>
+        </p>
+        <p>
+            <label>Total Pembayaran<s>
+                    <?= rupiah($total_belanja) ?></s>
+                <?= rupiah($harga_akhir) ?>
+            </label>
+        </p>
+        <p>
+            <label>Bayar
+                <?= rupiah($pembayaran) ?>
+            </label>
+        </p>
+        <p>
+            <label>
+                <?php
+                if ($kembalian < 0) {
+                    echo "Kurang ";
+                    echo rupiah($kembalian);
+                }else{
+                    echo "Kembalian " . rupiah($kembalian);
+                }
+                ?>
+        </label>
+        </p>
+    </fieldset>
+</form>
+</body>
+</html>
